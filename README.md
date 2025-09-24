@@ -1,6 +1,6 @@
 ## 🧩 Core Banking – Microservices with Spring Boot & Spring Cloud
-This project is a **microservices architecture** built with **Spring Boot** and **Spring Cloud** to simulate the backend of a virtual wallet / fintech system.
-The goal is to demonstrate concepts such as **Service Discovery, JWT Security, Inter-service Communication, and Container Deployment**.
+This project demonstrates a **microservices architecture** backend built with **Spring Boot** and **Spring Cloud** for a virtual wallet / fintech system. 
+It highlights features like **Service Discovery, JWT security, communication between microservices, and container deployment**.
 
 ## 🚀 Main Technologies
 - **Java 21 + Spring Boot 3**
