@@ -62,12 +62,17 @@ Each service validates the token against Auth before processing the request.
 
 🌐 Deployment (optional if published)
 This project is deployed at:
+
 Public Swagger: https://core-banking.onrender.com/swagger-ui.html
+
 Eureka Dashboard: https://core-banking-eureka.onrender.com
 
 📌 Next Steps (Roadmap)
+
 Implement API Gateway with Spring Cloud Gateway.
+
 Integrate Kafka for transaction events.
+
 Observability: Micrometer + Prometheus + Grafana.
 
 👨‍💻 Author
