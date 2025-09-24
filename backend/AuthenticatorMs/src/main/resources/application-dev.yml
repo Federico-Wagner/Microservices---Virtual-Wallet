@@ -1,0 +1,18 @@
+jwt:
+  secret: myXlocalXdevXsecretXkeyX32XcharsXminWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+  duration-minutes: 10
+
+microservices:
+  users:
+    base-url: http://USERS/api/V1/user
+    credentials: '1:1' #user:pass
+
+
+
+
+#  transactions:
+#    base-url: http://localhost:8090/api/V1/transaction
+#    credentials: '1:1' #user:pass
+#  accounts:
+#    base-url: http://localhost:80xx/api/V1/account
+#    credentials: '1:1' #user:pass
