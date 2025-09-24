@@ -41,8 +41,11 @@ transactions-service at http://localhost:8083
 
 📚 API Documentation
 Each microservice exposes a Swagger UI:
+
 Auth: http://localhost:8081/swagger-ui.html
+
 Users: http://localhost:8082/swagger-ui.html
+
 Transactions: http://localhost:8083/swagger-ui.html
 👉 Import the Postman collection included in /postman/collection.json to test the endpoints.
 
