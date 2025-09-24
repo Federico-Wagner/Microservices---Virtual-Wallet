@@ -34,9 +34,13 @@ bash
 Copy code
 docker-compose up -d
 This will start:
+
 eureka-server at http://localhost:8761
+
 auth-service at http://localhost:8081
+
 users-service at http://localhost:8082
+
 transactions-service at http://localhost:8083
 
 📚 API Documentation
@@ -47,6 +51,7 @@ Auth: http://localhost:8081/swagger-ui.html
 Users: http://localhost:8082/swagger-ui.html
 
 Transactions: http://localhost:8083/swagger-ui.html
+
 👉 Import the Postman collection included in /postman/collection.json to test the endpoints.
 
 🔐 Authentication Flow
