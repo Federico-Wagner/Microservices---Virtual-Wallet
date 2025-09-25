@@ -1,0 +1,174 @@
+#  docker compose up -d db-users db-accounts db-transactions
+#  docker compose up -d eureka
+#  docker compose up -d users
+
+x-environment: &default-env
+  JWT_SECRET: "myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2"
+
+services:
+  db-users:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: usersdb
+      MYSQL_USER: usersuser
+      MYSQL_PASSWORD: userspass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3310:3306"
+    networks:
+      - backend-net
+
+  db-accounts:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: accountsdb
+      MYSQL_USER: accountsuser
+      MYSQL_PASSWORD: accountspass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3311:3306"
+    networks:
+      - backend-net
+
+  db-transactions:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: transactionsdb
+      MYSQL_USER: txuser
+      MYSQL_PASSWORD: txpass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3312:3306"
+    networks:
+      - backend-net
+
+  eureka:
+    build:
+      context: ./backend/eureka
+      dockerfile: Dockerfile
+    container_name: eureka
+    image: eureka-service:1.0
+    ports:
+      - "8761:8761"
+    networks:
+      - backend-net
+
+  auth:
+    build: ./backend/AuthenticatorMs
+    container_name: auth
+    image: auth-service:1.0
+    ports:
+      - "8081:8091"
+    environment:
+      - PROFILE=prod
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - x-environment
+      - CREDENTIALS_USER=USER_SECRET_REST
+      - CREDENTIALS_PASS=PASS_SECRET_REST
+    depends_on:
+      - eureka
+    networks:
+      - backend-net
+
+  users:
+    build:
+      context: ./backend/users
+      dockerfile: Dockerfile
+    container_name: users
+    image: users-service:1.0
+    ports:
+      - "8082:8092"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - DB_URL=jdbc:mysql://db-users:3306/usersdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - DB_USER=usersuser
+      - DB_PASSWORD=userspass
+      - CREDENTIALS_USER=USER_SECRET_REST
+      - CREDENTIALS_PASS=PASS_SECRET_REST
+    depends_on:
+      - db-users
+      - eureka
+    networks:
+     - backend-net
+
+  accounts:
+    build: ./backend/accounts
+    container_name: accounts
+    image: accounts-service:1.0
+    ports:
+      - "8083:8093"
+    environment:
+      - PROFILE=prod
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - DB_URL=jdbc:mysql://db-accounts:3306/accountsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - DB_USER=accountsuser
+      - DB_PASSWORD=accountspass
+      - CREDENTIALS_USER=USER_SECRET_REST
+      - CREDENTIALS_PASS=PASS_SECRET_REST
+    depends_on:
+      - db-accounts
+      - eureka
+    networks:
+      - backend-net
+
+  transactions:
+    build: ./backend/transacciones
+    container_name: transactions
+    image: transacciones-service:1.0
+    ports:
+      - "8084:8094"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - DB_URL=jdbc:mysql://db-transactions:3306/transactionsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - DB_USER=txuser
+      - DB_PASSWORD=txpass
+      - CREDENTIALS_USER=USER_SECRET_REST
+      - CREDENTIALS_PASS=PASS_SECRET_REST
+    depends_on:
+      - db-transactions
+      - eureka
+    networks:
+      - backend-net
+
+# ELK STACK
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    networks:
+      - elk
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.2
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+  backend-net:
+    driver: bridge
