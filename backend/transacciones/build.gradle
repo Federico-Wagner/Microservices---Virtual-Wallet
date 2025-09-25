@@ -1,0 +1,67 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.4'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.billeteraVirtual'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2023.0.3")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	implementation 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+	// SWAGGER
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.mysql:mysql-connector-j:8.4.0'
+
+	// Eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+	// Spring Boot testing support
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Junit
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+	// Mockito
+	testImplementation 'org.mockito:mockito-core:5.12.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
