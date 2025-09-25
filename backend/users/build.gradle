@@ -1,9 +1,4 @@
 plugins {
-//	id 'java'
-//	id 'org.springframework.boot' version '3.5.3'
-//	id 'io.spring.dependency-management' version '1.1.7'
-
-
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
@@ -34,26 +29,11 @@ dependencyManagement {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-//
-//
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
-//
-//	implementation 'org.projectlombok:lombok:1.18.32'
-//	annotationProcessor 'org.projectlombok:lombok:1.18.32'
-//
-//	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
-
-
-
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
 
 
 	implementation 'org.projectlombok:lombok:1.18.32'
@@ -64,7 +44,7 @@ dependencies {
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-//	SWAGGER
+	//	SWAGGER
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
 
