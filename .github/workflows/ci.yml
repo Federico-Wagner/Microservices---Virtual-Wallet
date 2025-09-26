@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [auth, users, accounts, transactions]
+        service: [AuthenticatorMs, users, accounts, transactions]
 
     steps:
       - name: Checkout code
@@ -23,11 +23,13 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Grant execute permission for Gradle wrapper
-        run: chmod +x ./gradlew
+      - name: Grant execute permission for Gradle wrapper ${{ matrix.service }}
+        run: chmod +x ./backend/${{ matrix.service }}/gradlew
 
       - name: Build & Test ${{ matrix.service }}
-        run: ./gradlew :${{ matrix.service }}:clean :${{ matrix.service }}:build :${{ matrix.service }}:test
+        run: |
+          cd ./backend/${{ matrix.service }}
+          ./gradlew clean build test
 
       - name: Build Docker image ${{ matrix.service }}
         run: |
