@@ -20,11 +20,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build with Maven
-        run: mvn -B clean install --file pom.xml
+      - name: Build with Gradle
+        run: ./gradlew clean build
 
       - name: Run Tests
-        run: mvn test
+        run: ./gradlew test
 
       - name: Build Docker image
         run: docker build -t ${{ github.repository }}:latest .
