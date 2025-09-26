@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3311/accountsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: accountsuser
+    password: accountspass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect

@@ -1,10 +1,28 @@
+#spring:
+#  datasource:
+#    url: ${DB_URL:jdbc:mysql://localhost:3311/accountsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}
+#    username: ${DB_USER:accountsuser}
+#    password: ${DB_PASSWORD:accountspass}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+
 spring:
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3311/accountsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}
-    username: ${DB_USER:accountsuser}
-    password: ${DB_PASSWORD:accountspass}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER}
+#  jpa:
+#    hibernate:
+#      ddl-auto: ${DB_DDL:auto}
+#    show-sql: true
+#    database-platform: ${DB_PLATFORM}
   jpa:
     hibernate:
       ddl-auto: update
