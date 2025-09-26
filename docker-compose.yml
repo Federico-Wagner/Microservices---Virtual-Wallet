@@ -2,6 +2,7 @@
 #  docker compose up -d eureka
 #  docker compose up -d users
 #  docker exec -it auth env
+#  docker compose build
 
 x-environment: &default-env
   JWT_SECRET: "myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2"
@@ -55,7 +56,7 @@ services:
       - backend-net
 
   auth:
-    build: ./backend/AuthenticatorMs
+    build: ./backend/authenticator
     container_name: auth
     image: auth-service:1.0
     ports:
