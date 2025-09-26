@@ -1,27 +1,16 @@
-#spring:
-#  datasource:
-#    url: ${DB_URL:jdbc:mysql://localhost:3312/transactionsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}
-#    username: ${DB_USER:txuser}
-#    password: ${DB_PASSWORD:txpass}
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#    database-platform: org.hibernate.dialect.MySQL8Dialect
-
-
 spring:
+  profiles:
+    active: dev
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER}
+
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 eureka:

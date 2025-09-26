@@ -5,6 +5,7 @@ import com.BilleteraVirtual.accounts.enumerators.AccountStatus;
 import com.BilleteraVirtual.accounts.enumerators.CurrencyType;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.context.annotation.Profile;
 
 
 import java.math.BigDecimal;

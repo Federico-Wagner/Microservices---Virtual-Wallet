@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${jdbc:mysql://localhost:3312/transactionsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}
-    username: ${txuser}
-    password: ${txpass}
+    url: jdbc:mysql://localhost:3312/transactionsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: txuser
+    password: txpass
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
