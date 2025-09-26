@@ -1,6 +1,7 @@
 #  docker compose up -d db-users db-accounts db-transactions
 #  docker compose up -d eureka
 #  docker compose up -d users
+#  docker exec -it auth env
 
 x-environment: &default-env
   JWT_SECRET: "myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2"
@@ -66,6 +67,8 @@ services:
       - x-environment
       - CREDENTIALS_USER=USER_SECRET_REST
       - CREDENTIALS_PASS=PASS_SECRET_REST
+      - MS_USERS_BASE_URL=http://USERS/api/users
+      - MS_USERS_CREDENTIALS=USER_SECRET_REST:PASS_SECRET_REST
     depends_on:
       - eureka
     networks:
