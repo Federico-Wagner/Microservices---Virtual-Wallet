@@ -1,6 +1,8 @@
-version: "3.8"
+# Creates and runs containers for each microservice image published on Docker Hub.
+
 services:
   authenticator:
+    container_name: ${AUTHENTICATOR_CONTAINER_NAME}
     image: fede0104/virtual-wallet-app:authenticator-latest
     ports:
       - ${AUTH_HOST_PORT}:${AUTH_CONTAINER_PORT}
@@ -37,7 +39,7 @@ services:
     container_name: ${ACCOUNTS_CONTAINER_NAME}
     image: fede0104/virtual-wallet-app:accounts-latest
     ports:
-      - "8083:8093"
+      - ${ACCOUNTS_HOST_PORT}:${ACCOUNTS_CONTAINER_PORT}
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
@@ -52,9 +54,10 @@ services:
       - database-net
 
   transacciones:
+    container_name: ${TRANSACTIONS_CONTAINER_NAME}
     image: fede0104/virtual-wallet-app:transacciones-latest
     ports:
-      - "8084:8094"
+      - ${TRANSACTIONS_HOST_PORT}:${TRANSACTIONS_CONTAINER_PORT}
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
@@ -67,7 +70,6 @@ services:
     networks:
       - backend-net
       - database-net
-
 
 networks:
   backend-net:
