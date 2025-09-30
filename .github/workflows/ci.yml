@@ -31,6 +31,14 @@ jobs:
           cd ./backend/${{ matrix.service }}
           ./gradlew clean build test
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
       - name: Build Docker image ${{ matrix.service }}
-        run: |
-          docker build -t mydockerhubusername/${{ matrix.service }}:latest ./backend/${{ matrix.service }}
+        run: docker build -t fede0104/virtual-wallet-app:${{ matrix.service }}-latest ./backend/${{ matrix.service }}
+
+      - name: Push Docker image ${{ matrix.service }}
+        run: docker push fede0104/virtual-wallet-app:${{ matrix.service }}-latest
