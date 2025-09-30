@@ -90,7 +90,6 @@ services:
       - eureka
     networks:
       - backend-net
-      - database-net
 
   users:
     build:

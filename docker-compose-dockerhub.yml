@@ -1,0 +1,77 @@
+version: "3.8"
+services:
+  authenticator:
+    image: fede0104/virtual-wallet-app:authenticator-latest
+    ports:
+      - ${AUTH_HOST_PORT}:${AUTH_CONTAINER_PORT}
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      - MS_USERS_BASE_URL=${MS_USERS_BASE_URL}
+      - MS_USERS_CREDENTIALS=${MS_USERS_CREDENTIALS}
+      - x-environment
+      - CREDENTIALS_USER=USER_SECRET_REST
+      - CREDENTIALS_PASS=PASS_SECRET_REST
+    networks:
+      - backend-net
+
+  users:
+    container_name: ${USERS_CONTAINER_NAME}
+    image: fede0104/virtual-wallet-app:users-latest
+    ports:
+      - ${USERS_HOST_PORT}:${USERS_CONTAINER_PORT}
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      - DB_URL=${DB_USERS_URL}
+      - DB_DRIVER=${DB_USERS_DRIVER}
+      - DB_USER=${DB_USERS_USER}
+      - DB_PASSWORD=${DB_USERS_PASS}
+      - CREDENTIALS_USER=${USERS_CREDENTIALS_USER}
+      - CREDENTIALS_PASS=${USERS_CREDENTIALS_PASS}
+    networks:
+      - backend-net
+      - database-net
+
+  accounts:
+    container_name: ${ACCOUNTS_CONTAINER_NAME}
+    image: fede0104/virtual-wallet-app:accounts-latest
+    ports:
+      - "8083:8093"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      - DB_URL=${DB_ACCOUNTS_URL}
+      - DB_DRIVER=${DB_ACCOUNTS_DRIVER}
+      - DB_USER=${DB_ACCOUNTS_USER}
+      - DB_PASSWORD=${DB_ACCOUNTS_PASS}
+      - CREDENTIALS_USER=${ACCOUNTS_CREDENTIALS_USER}
+      - CREDENTIALS_PASS=${ACCOUNTS_CREDENTIALS_PASS}
+    networks:
+      - backend-net
+      - database-net
+
+  transacciones:
+    image: fede0104/virtual-wallet-app:transacciones-latest
+    ports:
+      - "8084:8094"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - DB_URL=jdbc:mysql://db-transactions:3306/transactionsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - DB_USER=txuser
+      - DB_PASSWORD=txpass
+      - DB_DRIVER=com.mysql.cj.jdbc.Driver
+      - CREDENTIALS_USER=USER_SECRET_REST
+      - CREDENTIALS_PASS=PASS_SECRET_REST
+    networks:
+      - backend-net
+      - database-net
+
+
+networks:
+  backend-net:
+    driver: bridge
+    name: ${BACKEND_NET_NAME}
+  database-net:
+    driver: bridge
