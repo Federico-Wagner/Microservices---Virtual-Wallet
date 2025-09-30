@@ -10,6 +10,7 @@ x-environment: &default-env
 services:
   db-users:
     image: mysql:8.0
+    container_name: db-users
     environment:
       MYSQL_DATABASE: usersdb
       MYSQL_USER: usersuser
@@ -22,6 +23,7 @@ services:
 
   db-accounts:
     image: mysql:8.0
+    container_name: db-accounts
     environment:
       MYSQL_DATABASE: accountsdb
       MYSQL_USER: accountsuser
@@ -34,6 +36,7 @@ services:
 
   db-transactions:
     image: mysql:8.0
+    container_name: db-transactions
     environment:
       MYSQL_DATABASE: transactionsdb
       MYSQL_USER: txuser
