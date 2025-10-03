@@ -1,10 +1,10 @@
-name: CI Pipeline Develop
+name: CI Pipeline Develop +
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, kubernetes-implementation ]
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, kubernetes-implementation ]
 
 jobs:
   build-and-test:

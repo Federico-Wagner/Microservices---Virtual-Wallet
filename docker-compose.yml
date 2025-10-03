@@ -56,22 +56,6 @@ services:
       timeout: 2s
       retries: 10
 
-  eureka:
-    build:
-      context: ./backend/eureka
-      dockerfile: Dockerfile
-    container_name: eureka
-    image: eureka-service:1.0
-    ports:
-      - "8761:8761"
-    networks:
-      - backend-net
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8761 || exit 1"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-
   auth:
     build: ./backend/authenticator
     container_name: ${AUTHENTICATOR_CONTAINER_NAME}
@@ -80,14 +64,11 @@ services:
       - ${AUTH_HOST_PORT}:${AUTH_CONTAINER_PORT}
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
       - MS_USERS_BASE_URL=${MS_USERS_BASE_URL}
       - MS_USERS_CREDENTIALS=${MS_USERS_CREDENTIALS}
       - x-environment
       - CREDENTIALS_USER=USER_SECRET_REST
       - CREDENTIALS_PASS=PASS_SECRET_REST
-    depends_on:
-      - eureka
     networks:
       - backend-net
 
@@ -101,7 +82,6 @@ services:
       - ${USERS_HOST_PORT}:${USERS_CONTAINER_PORT}
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
       - DB_URL=${DB_USERS_URL}
       - DB_DRIVER=${DB_USERS_DRIVER}
       - DB_USER=${DB_USERS_USER}
@@ -110,8 +90,6 @@ services:
       - CREDENTIALS_PASS=${USERS_CREDENTIALS_PASS}
     depends_on:
       db-users:
-        condition: service_healthy
-      eureka:
         condition: service_healthy
     networks:
      - backend-net
@@ -125,7 +103,6 @@ services:
       - ${ACCOUNTS_HOST_PORT}:${ACCOUNTS_CONTAINER_PORT}
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
       - DB_URL=${DB_ACCOUNTS_URL}
       - DB_DRIVER=${DB_ACCOUNTS_DRIVER}
       - DB_USER=${DB_ACCOUNTS_USER}
@@ -134,8 +111,6 @@ services:
       - CREDENTIALS_PASS=${ACCOUNTS_CREDENTIALS_PASS}
     depends_on:
       db-accounts:
-        condition: service_healthy
-      eureka:
         condition: service_healthy
     networks:
       - backend-net
@@ -149,7 +124,6 @@ services:
       - ${TRANSACTIONS_HOST_PORT}:${TRANSACTIONS_CONTAINER_PORT}
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
       - DB_URL=${DB_TRANSACTIONS_URL}
       - DB_DRIVER=${DB_TRANSACTIONS_DRIVER}
       - DB_USER=${DB_TRANSACTIONS_USER}
@@ -158,8 +132,6 @@ services:
       - CREDENTIALS_PASS=${TRANSACTIONS_CREDENTIALS_PASS}
     depends_on:
       db-transactions:
-        condition: service_healthy
-      eureka:
         condition: service_healthy
     networks:
       - backend-net

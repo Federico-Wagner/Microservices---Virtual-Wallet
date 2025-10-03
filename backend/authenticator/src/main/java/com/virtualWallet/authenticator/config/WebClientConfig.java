@@ -1,7 +1,6 @@
 package com.virtualWallet.authenticator.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -19,13 +18,11 @@ public class WebClientConfig {
     private String userMSCredentials;
 
     @Bean
-    @LoadBalanced
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
 
     @Bean("userWebClientBuilder")
-    @LoadBalanced // Eureka resolved Uri
     public WebClient.Builder userWebClientBuilder() {
         String basicAuth = Base64.getEncoder()
                 .encodeToString(userMSCredentials.getBytes());

@@ -50,9 +50,6 @@ dependencies {
     // Validaciones
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // Eureka
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
     // Spring Boot testing support
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 

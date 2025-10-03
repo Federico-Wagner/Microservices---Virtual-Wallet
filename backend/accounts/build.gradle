@@ -55,9 +55,6 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-	// Eureka
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
 	// Spring Boot testing support
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 

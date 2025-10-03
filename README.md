@@ -4,7 +4,7 @@ It highlights features like **Service Discovery, JWT security, communication bet
 
 ## 🚀 Main Technologies
 - **Java 21 + Spring Boot 3**
-- **Spring Cloud Netflix (Eureka)**
+- **Kubernetes**
 - **Spring Security + JWT**
 - **Spring WebFlux (WebClient)**
 - **PostgreSQL / MongoDB**
@@ -14,7 +14,6 @@ It highlights features like **Service Discovery, JWT security, communication bet
 ## 📐 Architecture
 flowchart LR
    ...
-Eureka Server: Microservice registry.
 Auth Service: Login, credential validation, JWT token issuance.
 Users Service: User CRUD operations.
 Transactions Service: Simulated transfers and transaction history.
@@ -25,7 +24,6 @@ git clone https://github.com/fedewagner/core-banking-microservices.git
 2. Start with Docker Compose
 docker-compose up -d
 This will start:
-- eureka-server at http://localhost:8761
 - auth-service at http://localhost:8081
 - users-service at http://localhost:8082
 - transactions-service at http://localhost:8083
@@ -47,7 +45,6 @@ Each service validates the token against Auth before processing the request.
 ## 🌐 Deployment (optional if published)
 This project is deployed at:
 - Public Swagger: https://core-banking.onrender.com/swagger-ui.html
-- Eureka Dashboard: https://core-banking-eureka.onrender.com
 
 ## 📌 Next Steps (Roadmap)
 - Implement API Gateway with Spring Cloud Gateway.
