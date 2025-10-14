@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transactions-config
+data:
+  SPRING_PROFILES_ACTIVE: dev
+  SPRING_DATASOURCE_URL: jdbc:mysql://transactions-db:3306/transactionsdb
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver

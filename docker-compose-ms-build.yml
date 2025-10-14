@@ -2,75 +2,9 @@ x-environment: &default-env
   JWT_SECRET: "myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2"
 
 services:
-  db-users:
-    image: mysql:8.0
-    container_name: db-users
-    environment:
-      MYSQL_DATABASE: usersdb
-      MYSQL_USER: usersuser
-      MYSQL_PASSWORD: userspass
-      MYSQL_ROOT_PASSWORD: rootpass
-    ports:
-      - "3310:3306"
-    networks:
-      - database-net
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 2s
-      timeout: 2s
-      retries: 10
-
-  db-accounts:
-    image: mysql:8.0
-    container_name: db-accounts
-    environment:
-      MYSQL_DATABASE: accountsdb
-      MYSQL_USER: accountsuser
-      MYSQL_PASSWORD: accountspass
-      MYSQL_ROOT_PASSWORD: rootpass
-    ports:
-      - "3311:3306"
-    networks:
-      - database-net
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 2s
-      timeout: 2s
-      retries: 10
-
-  db-transactions:
-    image: mysql:8.0
-    container_name: db-transactions
-    environment:
-      MYSQL_DATABASE: transactionsdb
-      MYSQL_USER: transactionsuser
-      MYSQL_PASSWORD: transactionspass
-      MYSQL_ROOT_PASSWORD: rootpass
-    ports:
-      - "3312:3306"
-    networks:
-      - database-net
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 2s
-      timeout: 2s
-      retries: 10
-
   auth:
     build: ./backend/authenticator
-    container_name: ${AUTHENTICATOR_CONTAINER_NAME}
-    image: auth-service:1.0
-    ports:
-      - ${AUTH_HOST_PORT}:${AUTH_CONTAINER_PORT}
-    environment:
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - MS_USERS_BASE_URL=${MS_USERS_BASE_URL}
-      - MS_USERS_CREDENTIALS=${MS_USERS_CREDENTIALS}
-      - x-environment
-      - CREDENTIALS_USER=USER_SECRET_REST
-      - CREDENTIALS_PASS=PASS_SECRET_REST
-    networks:
-      - backend-net
+    image: auth-service:1.2
 
   users:
     build:
@@ -88,9 +22,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${DB_USERS_PASS}
       - CREDENTIALS_USER=${USERS_CREDENTIALS_USER}
       - CREDENTIALS_PASS=${USERS_CREDENTIALS_PASS}
-    depends_on:
-      db-users:
-        condition: service_healthy
     networks:
      - backend-net
      - database-net
@@ -109,9 +40,6 @@ services:
       - DB_PASSWORD=${DB_ACCOUNTS_PASS}
       - CREDENTIALS_USER=${ACCOUNTS_CREDENTIALS_USER}
       - CREDENTIALS_PASS=${ACCOUNTS_CREDENTIALS_PASS}
-    depends_on:
-      db-accounts:
-        condition: service_healthy
     networks:
       - backend-net
       - database-net
@@ -130,9 +58,6 @@ services:
       - DB_PASSWORD=${DB_TRANSACTIONS_PASS}
       - CREDENTIALS_USER=${TRANSACTIONS_CREDENTIALS_USER}
       - CREDENTIALS_PASS=${TRANSACTIONS_CREDENTIALS_PASS}
-    depends_on:
-      db-transactions:
-        condition: service_healthy
     networks:
       - backend-net
       - database-net

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transactions-db-init
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS transactionsdb;
+    CREATE USER IF NOT EXISTS 'transactionsuser'@'%' IDENTIFIED BY 'transactionspass';
+    GRANT ALL PRIVILEGES ON transactionsdb.* TO 'transactionsuser'@'%';
+    FLUSH PRIVILEGES;

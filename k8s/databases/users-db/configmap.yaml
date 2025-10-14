@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: users-db-init
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS usersdb;
+    CREATE USER IF NOT EXISTS 'usersuser'@'%' IDENTIFIED BY 'userspass';
+    GRANT ALL PRIVILEGES ON usersdb.* TO 'usersuser'@'%';
+    FLUSH PRIVILEGES;

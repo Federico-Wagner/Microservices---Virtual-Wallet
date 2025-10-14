@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactions-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transactions-db
+  template:
+    metadata:
+      labels:
+        app: transactions-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - secretRef:
+                name: transactions-db-secret
+          volumeMounts:
+            - name: transactions-db-storage
+              mountPath: /var/lib/mysql
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: transactions-db-storage
+          persistentVolumeClaim:
+            claimName: transactions-db-pvc
+        - name: initdb
+          configMap:
+            name: transactions-db-init

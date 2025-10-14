@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accounts-db
+  template:
+    metadata:
+      labels:
+        app: accounts-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - secretRef:
+                name: accounts-db-secret
+          volumeMounts:
+            - name: accounts-db-storage
+              mountPath: /var/lib/mysql
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: accounts-db-storage
+          persistentVolumeClaim:
+            claimName: accounts-db-pvc
+        - name: initdb
+          configMap:
+            name: accounts-db-init

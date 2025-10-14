@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: accounts-db-init
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS accountsdb;
+    CREATE USER IF NOT EXISTS 'accountsuser'@'%' IDENTIFIED BY 'accountspass';
+    GRANT ALL PRIVILEGES ON accountsdb.* TO 'accountsuser'@'%';
+    FLUSH PRIVILEGES;
