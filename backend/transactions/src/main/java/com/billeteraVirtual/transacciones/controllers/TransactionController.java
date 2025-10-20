@@ -2,6 +2,7 @@ package com.billeteraVirtual.transacciones.controllers;
 
 
 
+import com.billeteraVirtual.transacciones.NotificationPublisher;
 import com.billeteraVirtual.transacciones.dto.ResponseDTO;
 import com.billeteraVirtual.transacciones.dto.TransactionDTO;
 import com.billeteraVirtual.transacciones.service.TransactionService;
@@ -20,8 +21,12 @@ public class TransactionController {
 
     TransactionService transactionService;
 
-    public TransactionController(TransactionService transactionService) {
+    private final NotificationPublisher publisher;
+
+    public TransactionController(TransactionService transactionService,
+                                 NotificationPublisher publisher) {
         this.transactionService = transactionService;
+        this.publisher = publisher;
     }
 
     @PostMapping("/transfer")
@@ -50,6 +55,14 @@ public class TransactionController {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+
+    // TEST
+    @GetMapping("/test-send")
+    public String testSendRabbitMQ() {
+        publisher.sendNotification("testEmail@test.com", "Hi!", "Test message");
+        return "Message sent!";
     }
 
 }

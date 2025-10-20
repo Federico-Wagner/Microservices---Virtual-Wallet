@@ -61,6 +61,9 @@ dependencies {
 	// Actuator (kubernetes check)
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	// RabitMQ
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
 }
 
 tasks.named('test') {

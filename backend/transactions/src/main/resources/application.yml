@@ -13,6 +13,11 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
+  rabbitmq:
+    host: ${RABBITMQ_DOCKER_CONTAINER_NAME}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
 credentials:
   user: ${CREDENTIALS_USER:1}
   password: ${CREDENTIALS_PASS:1}
