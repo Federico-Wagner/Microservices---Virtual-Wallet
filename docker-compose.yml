@@ -141,6 +141,22 @@ services:
       - backend-net
       - database-net
 
+  notifications:
+    build:
+      context: ./backend/notifications
+      dockerfile: Dockerfile
+    container_name: notifications
+    environment:
+      RABBITMQ_URL: amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USER: ${NOTIFICATIONS_SMTP_USER}
+      SMTP_PASS: ${NOTIFICATIONS_SMTP_PASS}
+    depends_on:
+      - rabbitmq
+    networks:
+      - backend-net
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: ${RABBITMQ_DOCKER_CONTAINER_NAME}
