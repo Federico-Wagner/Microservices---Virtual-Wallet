@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [authenticator, users, accounts, transacciones]
+        service: [authenticator, users, accounts, transactions]
 
     steps:
       - name: Checkout code
