@@ -23,6 +23,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "MS Users works!";
+    }
+
     @PostMapping("/getUserData/{user_id}")
     public ResponseDTO<UserDTO> getUserData(@PathVariable Long user_id) {
         long startTime = System.currentTimeMillis();

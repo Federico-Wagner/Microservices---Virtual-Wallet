@@ -29,6 +29,11 @@ public class TransactionController {
         this.publisher = publisher;
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "MS Transactions works!";
+    }
+
     @PostMapping("/transfer")
     public ResponseEntity<ResponseDTO<?>> transfer(@RequestBody TransactionDTO transactionDTO) {
         long startTime = System.currentTimeMillis();

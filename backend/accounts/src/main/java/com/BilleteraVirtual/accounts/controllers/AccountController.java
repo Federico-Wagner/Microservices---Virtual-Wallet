@@ -26,6 +26,11 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "MS Accounts works!";
+    }
+
 //     ALTAS Y BAJAS
 
     @PostMapping("/alta")

@@ -5,6 +5,7 @@ import com.billeteraVirtual.transacciones.dto.accountMS.WithdrawResponseDTO;
 import com.billeteraVirtual.transacciones.dto.authMS.TokenRequestDTO;
 import com.billeteraVirtual.transacciones.dto.authMS.TokenResponseDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,14 +14,15 @@ import java.math.BigDecimal;
 @Service
 public class ExternalResoursesConnectionService {
 
+    @Value("${microservices.accounts.base-url}")
+    private String accountMSbaseUrl;
+    @Value("${microservices.users.base-url}")
+    private String userMSbaseUrl;
+
 
     private final WebClient webClient;
     private final @Qualifier("webClientAuth") WebClient webClientAuth;
     private final @Qualifier("webClientAccounts") WebClient webClientAccounts;
-
-
-    private final String accountMSbaseUrl = "http://localhost:8080";
-    private final String userMSbaseUrl = "http://localhost:8090";
 
     public ExternalResoursesConnectionService(WebClient webClient,
                                               WebClient webClientAuth, WebClient webClientAccounts) {
