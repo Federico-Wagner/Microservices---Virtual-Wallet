@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoginResponseDTO {
 
-    public boolean authenticated;
-    public String token;
-    public String errorMessage;
+    private boolean authenticated;
+    private String token;
+    private String errorMessage;
 }

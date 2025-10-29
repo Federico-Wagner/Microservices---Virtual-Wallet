@@ -57,7 +57,7 @@ class AuthServiceTest {
                 .thenReturn(new UserCredentialsResponseDTO(false, null));
 
         // Act
-        LoginResponseDTO response = authService.login("123", "wrong");
+        LoginResponseDTO response = authService.login(new LoginRequestDTO("123", "wrong"));
 
         // Assert
         assertFalse(response.isAuthenticated());
@@ -76,7 +76,7 @@ class AuthServiceTest {
         when(jwtService.generateToken("123", RolesEnum.CLIENT)).thenReturn("jwt-token");
 
         // Act
-        LoginResponseDTO response = authService.login("123", "pass");
+        LoginResponseDTO response = authService.login(new LoginRequestDTO("123", "pass"));
 
         // Assert
         assertTrue(response.isAuthenticated());

@@ -25,7 +25,7 @@ public class ExternalResoursesConnectionService {
     public UserCredentialsResponseDTO validateUserCredentials(String dni, String password) {
         UserCredentialsRequestDTO requestDTO = new UserCredentialsRequestDTO(dni, password);
         return webClientUsers.post()
-                .uri("/validateUserCredentials")
+                .uri("/users/validateUserCredentials")
                 .bodyValue(requestDTO)
                 .retrieve()
                 .bodyToMono(UserCredentialsResponseDTO.class)

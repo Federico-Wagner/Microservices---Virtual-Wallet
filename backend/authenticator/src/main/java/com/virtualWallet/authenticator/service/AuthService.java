@@ -17,14 +17,15 @@ public class AuthService {
     @Autowired
     private final PermissionService permissionService;
 
-    public LoginResponseDTO login(String dni, String password) {
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         // Users Ms - validateUserCredentials
-        UserCredentialsResponseDTO userCredentialsResponseDTO = externalResoursesConnectionService.validateUserCredentials(dni, password);
+        UserCredentialsResponseDTO userCredentialsResponseDTO =
+                externalResoursesConnectionService.validateUserCredentials(loginRequestDTO.getUser(), loginRequestDTO.getPassword());
         if (!userCredentialsResponseDTO.isAuthenticated()) {
             return new LoginResponseDTO(false, null, "Invalid Credentials");
         }
         UserDTO userDTO = userCredentialsResponseDTO.getUserDTO();
-        String token = jwtService.generateToken(dni, userDTO.getRole());
+        String token = jwtService.generateToken(loginRequestDTO.getUser(), userDTO.getRole());
         return new LoginResponseDTO(true, token, null);
     }
 

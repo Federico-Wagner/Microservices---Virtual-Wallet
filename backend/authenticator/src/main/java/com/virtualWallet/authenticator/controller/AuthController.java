@@ -1,5 +1,6 @@
 package com.virtualWallet.authenticator.controller;
 
+import com.virtualWallet.authenticator.dto.LoginRequestDTO;
 import com.virtualWallet.authenticator.dto.LoginResponseDTO;
 import com.virtualWallet.authenticator.dto.TokenRequestDTO;
 import com.virtualWallet.authenticator.enumerators.RolesEnum;
@@ -16,9 +17,14 @@ public class AuthController {
     private final AuthService authService;
 
 
+    @GetMapping("/test")
+    public String test(){
+        return "MS Auth works!";
+    }
+
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestParam String username, @RequestParam String password) {
-        return authService.login(username, password);
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        return authService.login(loginRequestDTO);
     }
 
     // Validate token api
