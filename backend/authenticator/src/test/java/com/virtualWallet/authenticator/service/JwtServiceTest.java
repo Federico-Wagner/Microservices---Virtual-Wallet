@@ -24,7 +24,7 @@ class JwtServiceTest {
 
         // 🔧 Inyectamos los valores de @Value manualmente usando reflexión
         setPrivateField(jwtService, "SECRET_KEY", "mySuperSecretKeyForJwtMySuperSecretKeyForJwt"); // >= 32 bytes
-        setPrivateField(jwtService, "TOKEN_DURATION_MINUTES", 1L);
+        setPrivateField(jwtService, "TOKEN_DURATION_MINUTES", 10L);
     }
 
     private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
