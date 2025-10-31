@@ -4,13 +4,16 @@ import com.virtualWallet.authenticator.dto.TokenDTO;
 import com.virtualWallet.authenticator.dto.TokenRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@ActiveProfiles("test")
+@SpringBootTest
 class JwtServiceTest {
 
     private JwtService jwtService;
