@@ -29,4 +29,4 @@ jobs:
       - name: Build & Test ${{ matrix.service }}
         run: |
           cd ./backend/${{ matrix.service }}
-          ./gradlew clean build test
+          ./gradlew clean build test --stacktrace --info
