@@ -3,5 +3,5 @@ spring:
     name: auth
 
 jwt:
-  secret: ${JWT_SECRET}
-  duration-minutes: ${JWT_SECRET_DURATION}
+  secret: ${JWT_SECRET:test-secret}
+  duration-minutes: ${JWT_SECRET_DURATION:10}
