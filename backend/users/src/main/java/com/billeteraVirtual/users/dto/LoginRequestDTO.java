@@ -1,11 +1,12 @@
-package com.virtualWallet.authenticator.dto;
+package com.billeteraVirtual.users.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserCredentialsRequestDTO {
+public class LoginRequestDTO {
+
     private String dni;
     private String password;
 }

@@ -1,0 +1,61 @@
+//package com.virtualWallet.authenticator.config;
+//
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+//import org.springframework.security.web.SecurityFilterChain;
+//
+//import static org.springframework.security.config.Customizer.withDefaults;
+//
+//@Configuration
+//public class SecurityConfig {
+//
+//    @Value("${credentials.user}")
+//    private String credentialsUser;
+//
+//    @Value("${credentials.password}")
+//    private String credentialsPassword;
+//
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+//        UserDetails user = User.withUsername(credentialsUser)
+//                .password(passwordEncoder.encode(credentialsPassword))
+//                .roles("ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user);
+//    }
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(
+//                                "/swagger-ui.html",
+//                                "/swagger-ui/**",
+//                                "/v3/api-docs/**",
+//                                "/actuator/health",         // permite probe liveness/readiness
+//                                "/actuator/info",
+//                                "/auth/test"
+//                        ).permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin(withDefaults())   // habilita login form
+//                .httpBasic(withDefaults());  // habilita basic auth
+//        return http.build();
+//    }
+//
+//}
+//
+//

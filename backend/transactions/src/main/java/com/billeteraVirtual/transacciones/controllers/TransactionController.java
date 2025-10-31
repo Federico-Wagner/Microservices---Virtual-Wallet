@@ -5,12 +5,14 @@ package com.billeteraVirtual.transacciones.controllers;
 import com.billeteraVirtual.transacciones.NotificationPublisher;
 import com.billeteraVirtual.transacciones.dto.ResponseDTO;
 import com.billeteraVirtual.transacciones.dto.TransactionDTO;
+import com.billeteraVirtual.transacciones.dto.TransactionRequestDTO;
 import com.billeteraVirtual.transacciones.service.TransactionService;
+import com.billeteraVirtual.transacciones.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
@@ -34,40 +36,28 @@ public class TransactionController {
         return "MS Transactions works!";
     }
 
-    @PostMapping("/transfer")
-    public ResponseEntity<ResponseDTO<?>> transfer(@RequestBody TransactionDTO transactionDTO) {
-        long startTime = System.currentTimeMillis();
-
-        ResponseDTO<?> responseDTO = this.transactionService.transfer(transactionDTO);
-
-        waitRandomMiliSeconds(2000, 5000);
-        log.info("GET_USER_DATA", kv("duration_ms", calculateDuration(startTime)));
-        return ResponseEntity.ok(responseDTO);
-    }
-
-
-    // Va en un logs util
-    private long calculateDuration(long startTime) {
-        long endTime = System.currentTimeMillis();
-        return endTime - startTime;
-    }
-
-    // Develop utils
-    public static void waitRandomMiliSeconds(int min, int max) {
-        int milisegundos = ThreadLocalRandom.current().nextInt(min, max);
-        try {
-            Thread.sleep(milisegundos);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-
-    // TEST
-    @GetMapping("/test-send")
+    @GetMapping("/test-send-notification")
     public String testSendRabbitMQ() {
         publisher.sendNotification("testEmail@test.com", "Hi!", "Test message");
         return "Message sent!";
+    }
+
+    @PostMapping("/get-transactions-history")
+    public ResponseEntity<ResponseDTO<List<TransactionDTO>>> getTransactionHistory(@RequestBody String token){
+        long startTime = System.currentTimeMillis();
+        ResponseDTO<List<TransactionDTO>> responseDTO = this.transactionService.getTransactionHistory(token);
+//        Utils.waitRandomMiliSeconds(2000, 5000);
+        log.info("TRANSACTION_HISTORY", kv("duration_ms", Utils.calculateDuration(startTime)));
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<ResponseDTO<?>> withdraw(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+        long startTime = System.currentTimeMillis();
+        ResponseDTO<?> responseDTO = this.transactionService.withdraw(transactionRequestDTO);
+//        Utils.waitRandomMiliSeconds(2000, 5000);
+        log.info("WITHDRAW", kv("duration_ms", Utils.calculateDuration(startTime)));
+        return ResponseEntity.ok(responseDTO);
     }
 
 }

@@ -3,10 +3,10 @@ spring:
     active: dev
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    url: ${DB_USERS_URL}
+    username: ${DB_USERS_USER}
+    password: ${DB_USERS_PASS}
+    driver-class-name: ${DB_USERS_DRIVER}
 
   jpa:
     hibernate:
@@ -14,24 +14,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 credentials:
-  user: ${CREDENTIALS_USERS_USER}
-  password: ${CREDENTIALS_USERS_PASS}
-
-jwt:
-  secret: ${JWT_SECRET:myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2}
-  duration-minutes: ${JWT_SECRET_DURATION:10}
-
+  user: ${CREDENTIALS_USERS_USER:1}
+  password: ${CREDENTIALS_USERS_PASS:1}
 
 microservices:
   auth:
     base-url: ${URL_AUTH_MS}
-    credentials: ${CREDENTIALS_AUTH_MS}
-  users:
-    base-url: ${URL_USERS_MS}
-    credentials: ${CREDENTIALS_USERS_MS}
-  accounts:
-    base-url: ${URL_ACCOUNTS_MS}
-    credentials: ${CREDENTIALS_ACCOUNTS_MS}
-  transactions:
-    base-url: ${URL_TRANSACTIONS_MS}
-    credentials: ${CREDENTIALS_TRANSACTIONS_MS}

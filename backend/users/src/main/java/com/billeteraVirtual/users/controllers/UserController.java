@@ -1,9 +1,9 @@
 package com.billeteraVirtual.users.controllers;
 
 
+import com.billeteraVirtual.users.dto.LoginRequestDTO;
+import com.billeteraVirtual.users.dto.RegisterDTO;
 import com.billeteraVirtual.users.dto.ResponseDTO;
-import com.billeteraVirtual.users.dto.UserCredentialsRequestDTO;
-import com.billeteraVirtual.users.dto.UserCredentialsResponseDTO;
 import com.billeteraVirtual.users.dto.UserDTO;
 import com.billeteraVirtual.users.service.UserService;
 import com.billeteraVirtual.users.util.Utils;
@@ -24,41 +24,35 @@ public class UserController {
     }
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         return "MS Users works!";
     }
 
-    @PostMapping("/getUserData/{user_id}")
-    public ResponseDTO<UserDTO> getUserData(@PathVariable Long user_id) {
+    @PostMapping("/login")
+    public ResponseDTO<String> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         long startTime = System.currentTimeMillis();
-
-        ResponseDTO<UserDTO> responseDTO = this.userService.getUserData(user_id);
-
-        Utils.waitRandomMiliSeconds(2000, 5000);
-        log.info("GET_USER_DATA", kv("duration_ms", Utils.calculateDuration(startTime)));
+        ResponseDTO<String> responseDTO = this.userService.login(loginRequestDTO);
+//        Utils.waitRandomMiliSeconds(1000, 2000);
+        log.info("LOGIN_USER", kv("duration_ms", Utils.calculateDuration(startTime)));
         return responseDTO;
     }
 
-    @PostMapping("/createUser")
-    public ResponseDTO<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    @PostMapping("/register")
+    public ResponseDTO<?> register(@RequestBody RegisterDTO registerDto) {
         long startTime = System.currentTimeMillis();
-
-        ResponseDTO<UserDTO> responseDTO = this.userService.createUser(userDTO);
-
-        Utils.waitRandomMiliSeconds(2000, 5000);
-        log.info("CREATE_USER", kv("duration_ms", Utils.calculateDuration(startTime)));
+        ResponseDTO<?> responseDTO = this.userService.registerNewClient(registerDto);
+//        Utils.waitRandomMiliSeconds(1000, 2000);
+        log.info("REGISTER_USER", kv("duration_ms", Utils.calculateDuration(startTime)));
         return responseDTO;
     }
 
-    @PostMapping("/validateUserCredentials")
-    public UserCredentialsResponseDTO validateUserCredentials(@RequestBody UserCredentialsRequestDTO userCredentialsRequestDTO) {
+    @GetMapping("/userData/{token}")
+    public ResponseDTO<UserDTO> getUserDataToken(@PathVariable String token) {
         long startTime = System.currentTimeMillis();
-
-        UserCredentialsResponseDTO userCredentialsResponseDTO = this.userService.validateUserCredentials(userCredentialsRequestDTO);
-
-        Utils.waitRandomMiliSeconds(2000, 5000);
-        log.info("CREDENTIALS_VALIDATION", kv("duration_ms", Utils.calculateDuration(startTime)));
-        return userCredentialsResponseDTO;
+        ResponseDTO<UserDTO> responseDTO = this.userService.getUserDataToken(token);
+//        Utils.waitRandomMiliSeconds(1000, 2000);
+        log.info("GET_USER_DATA_TOKEN", kv("duration_ms", Utils.calculateDuration(startTime)));
+        return responseDTO;
     }
 
 }

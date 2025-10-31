@@ -1,33 +1,19 @@
-package com.BilleteraVirtual.accounts.entity;
-
+package com.BilleteraVirtual.accounts.dto;
 
 import com.BilleteraVirtual.accounts.enumerators.AccountStatus;
 import com.BilleteraVirtual.accounts.enumerators.CurrencyType;
-import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.context.annotation.Profile;
-
 
 import java.math.BigDecimal;
 
 @Data
-@Entity
-public class Account {
+public class AccountDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long userId;
-
     private String alias;
-
     private BigDecimal balance;
-
-    @Enumerated(EnumType.STRING)
     private CurrencyType currency;
-
-    @Enumerated(EnumType.STRING)
     private AccountStatus state;
 
 }

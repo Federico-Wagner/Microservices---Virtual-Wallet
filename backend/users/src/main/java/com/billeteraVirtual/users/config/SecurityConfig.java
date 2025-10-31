@@ -46,7 +46,9 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/actuator/health",         // permite probe liveness/readiness
-                                "/actuator/info"
+                                "/actuator/info",
+                                "/users/register",
+                                "/users/test"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

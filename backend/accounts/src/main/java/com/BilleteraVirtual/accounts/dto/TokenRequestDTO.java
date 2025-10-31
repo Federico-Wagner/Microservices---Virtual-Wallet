@@ -1,4 +1,4 @@
-package com.billeteraVirtual.transacciones.dto.authMS;
+package com.BilleteraVirtual.accounts.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

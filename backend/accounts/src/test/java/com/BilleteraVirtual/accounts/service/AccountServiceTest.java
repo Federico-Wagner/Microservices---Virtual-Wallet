@@ -1,20 +1,27 @@
 package com.BilleteraVirtual.accounts.service;
 
-import com.BilleteraVirtual.accounts.dto.*;
+import com.BilleteraVirtual.accounts.dto.CreateAccountDTO;
+import com.BilleteraVirtual.accounts.dto.UpdateAccountDTO;
+import com.BilleteraVirtual.accounts.dto.WithdrawRequestDTO;
 import com.BilleteraVirtual.accounts.entity.Account;
 import com.BilleteraVirtual.accounts.enumerators.AccountStatus;
 import com.BilleteraVirtual.accounts.enumerators.CurrencyType;
 import com.BilleteraVirtual.accounts.repository.AccountRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AccountServiceTest {
 
@@ -33,7 +40,7 @@ class AccountServiceTest {
     void testAltaCuenta() {
         CreateAccountDTO dto = new CreateAccountDTO();
         dto.setUserId(1L);
-        dto.setMoneda(CurrencyType.USD);
+        dto.setCurrency(CurrencyType.USD);
 
         accountService.altaCuenta(dto);
 
@@ -41,9 +48,9 @@ class AccountServiceTest {
         verify(accountRepository).save(captor.capture());
         Account saved = captor.getValue();
 
-        assertEquals(AccountStatus.ACTIVE, saved.getEstado());
-        assertEquals(CurrencyType.USD, saved.getMoneda());
-        assertEquals(BigDecimal.ZERO, saved.getSaldo());
+        assertEquals(AccountStatus.ACTIVE, saved.getState());
+        assertEquals(CurrencyType.USD, saved.getCurrency());
+        assertEquals(BigDecimal.ZERO, saved.getBalance());
         assertEquals(1L, saved.getUserId());
     }
 
@@ -51,13 +58,13 @@ class AccountServiceTest {
     void testBajaCuenta() {
         Account account = new Account();
         account.setId(1L);
-        account.setEstado(AccountStatus.ACTIVE);
+        account.setState(AccountStatus.ACTIVE);
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
 
         accountService.bajaCuenta(1L);
 
-        assertEquals(AccountStatus.CLOSED, account.getEstado());
+        assertEquals(AccountStatus.CLOSED, account.getState());
         verify(accountRepository).save(account);
     }
 
@@ -75,7 +82,7 @@ class AccountServiceTest {
     @Test
     void testConsultarFondoCuenta() {
         Account account = new Account();
-        account.setSaldo(BigDecimal.valueOf(100));
+        account.setBalance(BigDecimal.valueOf(100));
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
 
@@ -87,7 +94,7 @@ class AccountServiceTest {
     void testActualizarSaldo() {
         Account account = new Account();
         account.setId(1L);
-        account.setSaldo(BigDecimal.ZERO);
+        account.setBalance(BigDecimal.ZERO);
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
 
@@ -97,7 +104,7 @@ class AccountServiceTest {
 
         accountService.actualizarSaldo(dto);
 
-        assertEquals(BigDecimal.valueOf(500), account.getSaldo());
+        assertEquals(BigDecimal.valueOf(500), account.getBalance());
         verify(accountRepository).save(account);
     }
 
@@ -105,13 +112,13 @@ class AccountServiceTest {
     void testExecuteWithdraw_OK() {
         Account from = new Account();
         from.setId(1L);
-        from.setEstado(AccountStatus.ACTIVE);
-        from.setSaldo(BigDecimal.valueOf(1000));
+        from.setState(AccountStatus.ACTIVE);
+        from.setBalance(BigDecimal.valueOf(1000));
 
         Account to = new Account();
         to.setId(2L);
-        to.setEstado(AccountStatus.ACTIVE);
-        to.setSaldo(BigDecimal.valueOf(200));
+        to.setState(AccountStatus.ACTIVE);
+        to.setBalance(BigDecimal.valueOf(200));
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(from));
         when(accountRepository.findById(2L)).thenReturn(Optional.of(to));
@@ -124,8 +131,8 @@ class AccountServiceTest {
         var response = accountService.executeWithdraw(request);
 
         assertTrue(response.isSuccess());
-        assertEquals(BigDecimal.valueOf(700), from.getSaldo());
-        assertEquals(BigDecimal.valueOf(500), to.getSaldo());
+        assertEquals(BigDecimal.valueOf(700), from.getBalance());
+        assertEquals(BigDecimal.valueOf(500), to.getBalance());
 
         verify(accountRepository).save(from);
         verify(accountRepository).save(to);
@@ -149,16 +156,16 @@ class AccountServiceTest {
 
         // Cuenta no activa
         Account from = new Account();
-        from.setEstado(AccountStatus.CLOSED);
+        from.setState(AccountStatus.CLOSED);
         Account to = new Account();
-        to.setEstado(AccountStatus.ACTIVE);
+        to.setState(AccountStatus.ACTIVE);
         when(accountRepository.findById(1L)).thenReturn(Optional.of(from));
         when(accountRepository.findById(2L)).thenReturn(Optional.of(to));
         assertEquals("CUENTA NO ACTIVA: CLOSED", accountService.consultarCuentaParaTransferencia(dto));
 
         // Saldo insuficiente
-        from.setEstado(AccountStatus.ACTIVE);
-        from.setSaldo(BigDecimal.valueOf(50));
+        from.setState(AccountStatus.ACTIVE);
+        from.setBalance(BigDecimal.valueOf(50));
         dto.setAmount(BigDecimal.valueOf(100));
         assertEquals("SALDO INSUFICIENTE", accountService.consultarCuentaParaTransferencia(dto));
     }

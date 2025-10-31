@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 public class UpdateAccountDTO {
 
     private Long user_id;
-
     private Long account_id;
-
     private BigDecimal newSaldo;
 
 }

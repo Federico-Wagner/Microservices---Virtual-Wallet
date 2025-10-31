@@ -3,30 +3,16 @@ spring:
     active: dev
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    url: ${DB_ACCOUNTS_URL}
+    username: ${DB_ACCOUNTS_USER}
+    password: ${DB_ACCOUNTS_PASS}
+    driver-class-name: ${DB_ACCOUNTS_DRIVER}
 
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
-jwt:
-  secret: ${JWT_SECRET:myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2}
-  duration-minutes: ${JWT_SECRET_DURATION:10}
-
 microservices:
   auth:
     base-url: ${URL_AUTH_MS}
-    credentials: ${CREDENTIALS_AUTH_MS}
-  users:
-    base-url: ${URL_USERS_MS}
-    credentials: ${CREDENTIALS_USERS_MS}
-  accounts:
-    base-url: ${URL_ACCOUNTS_MS}
-    credentials: ${CREDENTIALS_ACCOUNTS_MS}
-  transactions:
-    base-url: ${URL_TRANSACTIONS_MS}
-    credentials: ${CREDENTIALS_TRANSACTIONS_MS}

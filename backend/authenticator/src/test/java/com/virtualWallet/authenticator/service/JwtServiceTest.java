@@ -1,10 +1,14 @@
 package com.virtualWallet.authenticator.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import com.virtualWallet.authenticator.enumerators.RolesEnum;
+import com.virtualWallet.authenticator.dto.TokenDTO;
+import com.virtualWallet.authenticator.dto.TokenRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+
+import java.lang.reflect.Field;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class JwtServiceTest {
@@ -12,50 +16,72 @@ class JwtServiceTest {
     private JwtService jwtService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         jwtService = new JwtService();
-        // inyectamos los valores de @Value manualmente
-        ReflectionTestUtils.setField(jwtService, "SECRET_KEY", "my-super-secret-key-which-is-long-enough");
-        ReflectionTestUtils.setField(jwtService, "SECRET_KEY_DURATION_MINUTES", 60L); // 60 min
+
+        // 🔧 Inyectamos los valores de @Value manualmente usando reflexión
+        setPrivateField(jwtService, "SECRET_KEY", "mySuperSecretKeyForJwtMySuperSecretKeyForJwt"); // >= 32 bytes
+        setPrivateField(jwtService, "TOKEN_DURATION_MINUTES", 1L);
+    }
+
+    private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
+        Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
 
     @Test
-    void generateToken_shouldReturnNonNullToken() {
-        String token = jwtService.generateToken("user123", RolesEnum.CLIENT);
+    void generateToken_shouldReturnValidJwtString() {
+        TokenRequestDTO tokenRequestDTO = new TokenRequestDTO("10", "20-98765432-1", "CLIENT");
+        String token = jwtService.generateToken(tokenRequestDTO);
         assertNotNull(token);
+        assertTrue(token.split("\\.").length == 3, "El token debería tener 3 secciones JWT (header.payload.signature)");
     }
 
     @Test
-    void validateTokenAndGetUserIdentificator_shouldReturnUserId_whenTokenIsValid() {
-        String token = jwtService.generateToken("user123", RolesEnum.CLIENT);
-        String userId = jwtService.validateTokenAndGetUserIdentificator(token);
-        assertEquals("user123", userId);
+    void authenticateTokenAndGetData_shouldReturnValidTokenDTO_whenTokenIsValid() {
+        // Arrange
+        TokenRequestDTO tokenRequestDTO = new TokenRequestDTO("10", "20-98765432-1", "CLIENT");
+        String token = jwtService.generateToken(tokenRequestDTO);
+        // Act
+        TokenDTO tokenDTO = jwtService.authenticateTokenAndGetData(token);
+        // Assert
+        assertTrue(tokenDTO.isAuthenticated());
+        assertEquals("10", tokenDTO.getUserId());
+        assertEquals("20-98765432-1", tokenDTO.getUserCuit());
+        assertEquals("CLIENT", tokenDTO.getUserRole());
     }
 
     @Test
-    void validateTokenAndGetUserIdentificator_shouldReturnNull_whenTokenIsInvalid() {
-        String invalidToken = "invalid.token.value";
-        String userId = jwtService.validateTokenAndGetUserIdentificator(invalidToken);
-        assertNull(userId);
+    void authenticateTokenAndGetData_shouldReturnNotAuthenticated_whenTokenIsInvalid() {
+        // Token totalmente inválido (mal formado)
+        String invalidToken = "invalid.token.string";
+
+        TokenDTO tokenDTO = jwtService.authenticateTokenAndGetData(invalidToken);
+
+        assertFalse(tokenDTO.isAuthenticated());
+        assertNull(tokenDTO.getUserId());
+        assertNull(tokenDTO.getUserCuit());
+        assertNull(tokenDTO.getUserRole());
     }
 
     @Test
-    void getTokenRole_shouldReturnCorrectRole() {
-        String token = jwtService.generateToken("user123", RolesEnum.CLIENT);
-        RolesEnum role = jwtService.getTokenRole(token);
-        assertEquals(RolesEnum.CLIENT, role);
-    }
+    void authenticateTokenAndGetData_shouldReturnNotAuthenticated_whenTokenIsExpired() throws Exception {
+        // Configuramos duración de token muy corta
+        setPrivateField(jwtService, "TOKEN_DURATION_MINUTES", 0L);
 
-    @Test
-    void validateToken_shouldReturnNull_whenTokenExpired() throws InterruptedException {
-        // token with zero duration
-        ReflectionTestUtils.setField(jwtService, "SECRET_KEY_DURATION_MINUTES", 0L);
-        String token = jwtService.generateToken("user123", RolesEnum.CLIENT);
+        // Generamos token ya expirado
+        // Arrange
+        TokenRequestDTO tokenRequestDTO = new TokenRequestDTO("10", "20-98765432-1", "CLIENT");
+        String token = jwtService.generateToken(tokenRequestDTO);
 
-        // Wait to ensure token expiration
-        Thread.sleep(1000);
+        // Esperamos 2 segundos por las dudas
+        TimeUnit.SECONDS.sleep(2);
 
-        String userId = jwtService.validateTokenAndGetUserIdentificator(token);
-        assertNull(userId);
+        // Act
+        TokenDTO tokenDTO = jwtService.authenticateTokenAndGetData(token);
+
+        // Assert
+        assertFalse(tokenDTO.isAuthenticated());
     }
 }

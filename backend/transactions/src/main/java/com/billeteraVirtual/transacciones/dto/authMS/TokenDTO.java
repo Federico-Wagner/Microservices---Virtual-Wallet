@@ -5,8 +5,15 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class TokenRequestDTO {
+public class TokenDTO {
+
+    public TokenDTO(String token) {
+        this.token = token;
+    }
+
+    private String token;
+    private boolean authenticated;
     private String userId;
     private String userCuit;
-    private String rolesEnum;
+    private String userRole;
 }

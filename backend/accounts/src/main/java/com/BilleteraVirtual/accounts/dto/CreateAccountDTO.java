@@ -7,7 +7,6 @@ import lombok.Data;
 public class CreateAccountDTO {
 
     private Long userId;
-
-    private CurrencyType moneda;
+    private CurrencyType currency;
 
 }

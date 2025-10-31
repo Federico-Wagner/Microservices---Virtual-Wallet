@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -16,13 +17,15 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
+    private LocalDateTime timeStamp;
+
     private Long accountIdFrom;
 
     private Long accountIdTo;
 
     private BigDecimal amount;
-
-    private String transactionCheck;
 
     @Enumerated(EnumType.STRING)
     private TransactionState transactionState;

@@ -2,25 +2,6 @@ spring:
   application:
     name: auth
 
-
-credentials:
-  user: ${CREDENTIALS_USER:1}
-  password: ${CREDENTIALS_PASS:1}
-
 jwt:
-  secret: ${JWT_SECRET:myXSuperXSecretXKeyX32charsMinmyXSuperXSecretXKeyX32charsMinX2}
-  duration-minutes: ${JWT_SECRET_DURATION:10}
-
-microservices:
-  auth:
-    base-url: ${URL_AUTH_MS}
-    credentials: ${CREDENTIALS_AUTH_MS}
-  users:
-    base-url: ${URL_USERS_MS}
-    credentials: ${CREDENTIALS_USERS_MS}
-  accounts:
-    base-url: ${URL_ACCOUNTS_MS}
-    credentials: ${CREDENTIALS_ACCOUNTS_MS}
-  transactions:
-    base-url: ${URL_TRANSACTIONS_MS}
-    credentials: ${CREDENTIALS_TRANSACTIONS_MS}
+  secret: ${JWT_SECRET}
+  duration-minutes: ${JWT_SECRET_DURATION}

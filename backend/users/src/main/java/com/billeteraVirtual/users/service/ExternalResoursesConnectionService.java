@@ -1,8 +1,8 @@
-package com.billeteraVirtual.transacciones.service;
+package com.billeteraVirtual.users.service;
 
-import com.billeteraVirtual.transacciones.dto.accountMS.WithdrawRequestDTO;
-import com.billeteraVirtual.transacciones.dto.accountMS.WithdrawResponseDTO;
-import com.billeteraVirtual.transacciones.dto.authMS.TokenDTO;
+import com.billeteraVirtual.users.dto.ResponseDTO;
+import com.billeteraVirtual.users.dto.TokenDTO;
+import com.billeteraVirtual.users.dto.TokenRequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,17 @@ public class ExternalResoursesConnectionService {
     @Value("${microservices.auth.base-url}")
     private String authMSBaseUrl;
 
-    @Value("${microservices.accounts.base-url}")
-    private String accountMSbaseUrl;
-
     private final WebClient webClient;
 
     public ExternalResoursesConnectionService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.build();
+
+    }
+
+    public ResponseDTO<?> generateToken(String id, String cuit, String role) {
+        String url = authMSBaseUrl + "/auth/generateToken";
+        TokenRequestDTO requestDTO = new TokenRequestDTO(id, cuit, role);
+        return this.executePost(url, requestDTO, ResponseDTO.class);
     }
 
     public TokenDTO authenticateToken(String token) {
@@ -30,12 +34,8 @@ public class ExternalResoursesConnectionService {
         return this.executePost(url, token, TokenDTO.class);
     }
 
-    public WithdrawResponseDTO executeWithdraw(WithdrawRequestDTO withdrawRequestDTO) {
-        String url = accountMSbaseUrl + "/accounts/executeWithdraw";
-        return this.executePost(url, withdrawRequestDTO, WithdrawResponseDTO.class);
-    }
 
-    private <T, V> T executePost(String url, V body, Class<T> responseType) {
+    public <T, V> T executePost(String url, V body, Class<T> responseType) {
         try {
             return webClient.post()
                     .uri(url)

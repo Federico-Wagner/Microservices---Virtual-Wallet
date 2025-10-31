@@ -1,7 +1,7 @@
 package com.billeteraVirtual.transacciones.dto.accountMS;
 
 
-import com.billeteraVirtual.transacciones.dto.TransactionDTO;
+import com.billeteraVirtual.transacciones.dto.TransactionRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,13 +11,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class WithdrawRequestDTO {
 
+    private String token;
     private Long accountFrom;
     private Long accountTo;
     private BigDecimal amount;
 
-    public WithdrawRequestDTO(TransactionDTO transactionDTO) {
-        this.setAccountFrom(transactionDTO.getAccountFrom());
-        this.setAccountTo(transactionDTO.getAccountTo());
-        this.setAmount(transactionDTO.getAmount());
+    public WithdrawRequestDTO(TransactionRequestDTO transactionRequestDTO) {
+        this.setToken(transactionRequestDTO.getToken());
+        this.setAccountFrom(transactionRequestDTO.getAccountIdFrom());
+        this.setAccountTo(transactionRequestDTO.getAccountIdTo());
+        this.setAmount(transactionRequestDTO.getAmount());
     }
 }

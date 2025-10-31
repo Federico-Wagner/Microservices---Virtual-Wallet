@@ -26,4 +26,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RolesEnum role;
 
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dni='" + dni + '\'' +
+                ", password='" + "[BLACKED]" + '\'' +
+                ", role=" + role +
+                '}';
+    }
+
 }

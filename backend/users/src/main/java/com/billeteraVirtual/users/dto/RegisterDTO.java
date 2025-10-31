@@ -4,7 +4,7 @@ package com.billeteraVirtual.users.dto;
 import lombok.Data;
 
 @Data
-public class CreateUserDTO {
+public class RegisterDTO {
 
     private String dni;
     private String name;
