@@ -36,27 +36,11 @@ public class JwtService {
         claims.put(ROLE_TAG, tokenRequestDTO.getRolesEnum());
         return Jwts.builder()
                 .setClaims(claims)
-//                .setSubject(tokenRequestDTO.getUserId()) //todo valisdar si es sacable
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_DURATION_MINUTES * 60_000))
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                 .compact();
     }
-
-//    private boolean tokenIsValid(String token) {
-//        try {
-//            Jwts.parserBuilder()
-//                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
-//                    .build()
-//                    .parseClaimsJws(token)
-//                    .getBody()
-//                    .getSubject();
-//            return true;
-//        } catch (JwtException e) {
-//            log.info(e.getMessage());
-//            return false; // invalid/expired token
-//        }
-//    }
 
     public TokenDTO authenticateTokenAndGetData(String token) {
         TokenDTO tokenDTO = new TokenDTO(token);

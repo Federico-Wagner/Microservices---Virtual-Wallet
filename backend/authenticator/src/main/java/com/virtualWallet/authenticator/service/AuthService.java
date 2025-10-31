@@ -3,14 +3,16 @@ package com.virtualWallet.authenticator.service;
 import com.virtualWallet.authenticator.dto.ResponseDTO;
 import com.virtualWallet.authenticator.dto.TokenDTO;
 import com.virtualWallet.authenticator.dto.TokenRequestDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     private final JwtService jwtService;
+
+    public AuthService(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
 
 
     public ResponseDTO<String> generateToken(TokenRequestDTO tokenRequestDTO) {
