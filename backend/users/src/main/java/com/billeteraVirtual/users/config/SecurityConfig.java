@@ -45,15 +45,16 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/actuator/health",         // permite probe liveness/readiness
+                                "/actuator/health",         // kubernetes probe liveness/readiness
                                 "/actuator/info",
+                                "/actuator/prometheus",
                                 "/users/register",
                                 "/users/test"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(withDefaults())   // habilita login form
-                .httpBasic(withDefaults());  // habilita basic auth
+                .formLogin(withDefaults())
+                .httpBasic(withDefaults());
         return http.build();
     }
 

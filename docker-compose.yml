@@ -59,7 +59,7 @@ services:
   auth:
     build: ./backend/authenticator
     container_name: ${AUTHENTICATOR_CONTAINER_NAME}
-    image: auth-service:1.0
+    image: auth-service:lastest
     ports:
       - ${AUTH_HOST_PORT}:${AUTH_CONTAINER_PORT}
     environment:
@@ -75,7 +75,7 @@ services:
       context: ./backend/users
       dockerfile: Dockerfile
     container_name: ${USERS_CONTAINER_NAME}
-    image: users-service:1.0
+    image: users-service:lastest
     ports:
       - ${USERS_HOST_PORT}:${USERS_CONTAINER_PORT}
     environment:
@@ -98,7 +98,7 @@ services:
   accounts:
     build: ./backend/accounts
     container_name: ${ACCOUNTS_CONTAINER_NAME}
-    image: accounts-service:1.0
+    image: accounts-service:lastest
     ports:
       - ${ACCOUNTS_HOST_PORT}:${ACCOUNTS_CONTAINER_PORT}
     environment:
@@ -119,7 +119,7 @@ services:
   transactions:
     build: ./backend/transactions
     container_name: ${TRANSACTIONS_CONTAINER_NAME}
-    image: transactions-service:1.0
+    image: transactions-service:lastest
     ports:
       - ${TRANSACTIONS_HOST_PORT}:${TRANSACTIONS_CONTAINER_PORT}
     environment:
@@ -178,6 +178,24 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    networks:
+      - backend-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - backend-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
     networks:
       - backend-net
 

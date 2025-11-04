@@ -1,0 +1,6 @@
+server:
+  port: 8080
+
+jwt:
+  secret: test-secret
+  duration-minutes: 10

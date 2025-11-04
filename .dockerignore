@@ -1,0 +1,18 @@
+# Gradle
+.gradle
+build/
+!build/libs/*.jar  # excepción si querés copiar solo el jar final
+
+# IDEs
+.idea
+.vscode
+
+# Git
+.git
+.gitignore
+
+# Logs y configs locales
+*.log
+*.env
+test.env
+docker-compose.yml
