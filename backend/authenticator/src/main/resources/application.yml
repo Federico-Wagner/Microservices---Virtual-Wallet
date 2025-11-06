@@ -12,8 +12,8 @@ management:
         enabled: true
 
 spring:
-  application:
-    name: auth
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
 
 jwt:
   secret: ${JWT_SECRET}

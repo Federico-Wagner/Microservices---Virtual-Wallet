@@ -24,15 +24,12 @@ public class AuthController {
 
     @PostMapping("/generateToken")
     public ResponseDTO<String> generateToken(@RequestBody TokenRequestDTO tokenRequestDTO) {
-        long startTime = System.currentTimeMillis();
         ResponseDTO<String> responseDTO = authService.generateToken(tokenRequestDTO);
-//        Utils.waitRandomMiliSeconds(1000, 2000);
         return responseDTO;
     }
 
     @PostMapping("/authenticateToken")
     public TokenDTO authenticateToken(@RequestBody String token) {
-        long startTime = System.currentTimeMillis();
         TokenDTO tokenDTO = authService.authenticateToken(token);
         return tokenDTO;
     }

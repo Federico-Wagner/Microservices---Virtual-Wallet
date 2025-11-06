@@ -55,7 +55,7 @@ public class JwtService {
             tokenDTO.setUserCuit(claims.get(USER_CUIT_TAG, String.class));
             tokenDTO.setUserRole(claims.get(ROLE_TAG, String.class));
         } catch (JwtException e) {
-            log.info("invalid or expired token: {}", e.getMessage());
+            log.info("Invalid or expired token: {}", e.getMessage());
             tokenDTO.setAuthenticated(false);
         }
         return tokenDTO;

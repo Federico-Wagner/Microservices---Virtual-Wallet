@@ -38,3 +38,16 @@ out/
 
 ### REPO ###
 prod.env
+
+### DBs ###
+*.db
+*.db-shm
+*.db-wal
+
+### Monitoring ###
+*.tsdb.gz
+*.gz
+/monitoring/loki/chunks
+
+### Logs ###
+/logs

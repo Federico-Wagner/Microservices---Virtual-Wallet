@@ -1,0 +1,77 @@
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - backend-net
+      - observability-net
+
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+
+
+  loki:
+    image: grafana/loki:3.1.0
+    container_name: loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    volumes:
+      - ./monitoring/loki/config/loki-config.yaml:/etc/loki/loki-config.yaml
+      - ./monitoring/loki/chunks:/loki/chunks
+      - ./monitoring/loki/wal:/loki/wal
+    ports:
+      - "3100:3100"
+    networks:
+      - observability-net
+
+  fluent-bit:
+    image: fluent/fluent-bit:2.1.9
+    container_name: fluent-bit
+    volumes:
+      - ./monitoring/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./monitoring/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf
+      - ./monitoring/fluent-bit/db:/fluent-bit/db
+      - ./logs/auth:/var/logs/auth
+      - ./logs/users:/var/logs/users
+      - ./logs/accounts:/var/logs/accounts
+      - ./logs/transactions:/var/logs/transactions
+    ports:
+      - "2020:2020"    # UI / métricas
+      - "24224:24224"  # recepción de logs
+    environment:
+      - FLB_LOG_LEVEL=info
+    depends_on:
+      - loki
+    restart: unless-stopped
+    networks:
+      - observability-net
+
+
+networks:
+  backend-net:
+    driver: bridge
+  observability-net:
+    driver: bridge
+
