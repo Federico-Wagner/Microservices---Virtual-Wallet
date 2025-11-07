@@ -22,8 +22,6 @@ public class TransactionServiceObservabilityLayer extends TransactionService {
 
     private final Metrics metrics;
 
-    private final String END_LOG_TEXT = "Process completed";
-
     public TransactionServiceObservabilityLayer(ExternalResoursesConnectionService extResourse,
                                                 TransactionRepository transactionRepository,
                                                 TransactionMapper transactionMapper,
