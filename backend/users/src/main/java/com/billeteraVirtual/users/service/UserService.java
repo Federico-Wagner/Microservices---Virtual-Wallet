@@ -114,13 +114,13 @@ public class UserService {
                     log.debug("Token authentication result | authenticated={} | userId={}", tokenDTO.isAuthenticated(), tokenDTO.getUserId());
                     // Step 2: Auth validation
                     if (!tokenDTO.isAuthenticated()) {
-                        log.warn("Token invalid or expired");
+                        log.info("Token invalid or expired");
                         return new ResponseDTO<>(false, "Token expired or invalid", null);
                     }
                     // Step 3: Get user data on DB
                     Optional<User> userOptional = userRepository.findById(Long.valueOf(tokenDTO.getUserId()));
                     if (userOptional.isEmpty()) {
-                        log.warn("User not found | userId={}", tokenDTO.getUserId());
+                        log.info("User not found | userId={}", tokenDTO.getUserId());
                         return new ResponseDTO<>(false, "User not found", null);
                     }
                     // Step 4: DTO conversion & password removal

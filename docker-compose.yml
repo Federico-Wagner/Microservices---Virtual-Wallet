@@ -119,6 +119,8 @@ services:
     networks:
       - backend-net
       - database-net
+    volumes:
+      - ./logs/accounts:/app/logs
 
   transactions:
     build: ./backend/transactions

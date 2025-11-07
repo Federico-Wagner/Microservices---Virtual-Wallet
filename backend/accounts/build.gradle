@@ -82,6 +82,10 @@ dependencies {
 	// Micrometer prometheus registry
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 
+	// Logs estandarizados
+	implementation 'ch.qos.logback:logback-classic'
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
 }
 
 tasks.named('test') {
