@@ -36,9 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-### REPO ###
-prod.env
-
 ### DBs ###
 *.db
 *.db-shm
