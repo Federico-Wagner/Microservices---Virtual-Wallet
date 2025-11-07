@@ -2,9 +2,9 @@ name: CI Pipeline Develop +
 
 on:
   push:
-    branches: [ develop, kubernetes-implementation ]
+    branches: [ develop ]
   pull_request:
-    branches: [ develop, kubernetes-implementation ]
+    branches: [ develop ]
 
 jobs:
   build-and-test:

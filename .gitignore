@@ -45,6 +45,10 @@ out/
 *.tsdb.gz
 *.gz
 /monitoring/loki/chunks
+/monitoring/loki/wal
 
 ### Logs ###
 /logs
+
+### ENV ###
+prod.env
