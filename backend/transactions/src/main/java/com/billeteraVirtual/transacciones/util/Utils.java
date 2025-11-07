@@ -18,4 +18,9 @@ public class Utils {
         }
     }
 
+    public static String maskToken(String token) {
+        if (token == null || token.length() < 10) return "****";
+        return token.substring(0, 5) + "*****" + token.substring(token.length() - 3);
+    }
+
 }

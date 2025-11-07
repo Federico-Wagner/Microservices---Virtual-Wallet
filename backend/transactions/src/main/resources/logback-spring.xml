@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    <springProperty scope="context" name="SERVICE_NAME" source="spring.application.name"/>
+    <springProperty scope="context" name="SERVICE_PROFILE" source="spring.profiles.active"/>
+
+    <!-- ======================================================= -->
+    <!-- APPENDER PARA ENTORNO DEV (formato legible) -->
+    <!-- ======================================================= -->
+    <appender name="CONSOLE_PATTERN" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | ${SERVICE_NAME:-unknown} ${SERVICE_PROFILE:-unknown} | %logger{36} | operation=%X{operation} | traceId=%X{traceId} | userId=%X{userId} | %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- ======================================================= -->
+    <!-- APPENDER PARA ENTORNO PROD (formato JSON estructurado) -->
+    <!-- ======================================================= -->
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <timeZone>UTC</timeZone>
+            <!-- Campos fijos -->
+            <customFields>
+                {
+                "service_version": "${APP_VERSION}"
+                }
+            </customFields>
+            <!-- Campos dinámicos -->
+            <includeMdcKeyName>operation</includeMdcKeyName>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+        </encoder>
+    </appender>
+
+    <!-- ======================================================= -->
+    <!-- APPENDER DE ARCHIVO (para Fluent Bit / Loki) -->
+    <!-- ======================================================= -->
+    <appender name="FILE_JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/app/logs/app.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <timeZone>UTC</timeZone>
+            <customFields>
+                {
+                "service_name": "${SERVICE_NAME:-unknown}",
+                "service_profile": "${SERVICE_PROFILE:-unknown}"
+                }
+            </customFields>
+            <includeMdcKeyName>operation</includeMdcKeyName>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/app/logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- ======================================================= -->
+    <!-- PERFIL: DESARROLLO -->
+    <!-- ======================================================= -->
+    <springProfile name="dev-local">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_PATTERN" />
+        </root>
+    </springProfile>
+
+    <!-- ======================================================= -->
+    <!-- PERFIL: TEST (opcional) -->
+    <!-- ======================================================= -->
+    <springProfile name="dev-docker">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_PATTERN" />
+            <appender-ref ref="FILE_JSON" />
+        </root>
+    </springProfile>
+
+    <!-- ======================================================= -->
+    <!-- PERFIL: PRODUCCIÓN -->
+    <!-- ======================================================= -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="JSON_CONSOLE" />
+            <appender-ref ref="FILE_JSON" />
+        </root>
+    </springProfile>
+
+</configuration>

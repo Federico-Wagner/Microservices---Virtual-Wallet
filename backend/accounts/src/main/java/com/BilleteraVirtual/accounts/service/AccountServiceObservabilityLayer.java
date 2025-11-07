@@ -32,23 +32,25 @@ public class AccountServiceObservabilityLayer extends AccountService {
     }
 
 
+    @Override
     public ResponseDTO<List<AccountDTO>> getUserAccountsToken(String token) {
         try (var ignored = metrics.trace("GET_USER_ACCOUNTS_TOKEN")) {
             log.info("Start process | token={}", Utils.maskToken(token));
             return metrics.getUserAccountsTokenTimer()
                     .record(() -> super.getUserAccountsToken(token));
         } finally {
-            log.debug(END_LOG_TEXT);
+            log.info(END_LOG_TEXT);
         }
     }
 
+    @Override
     public ResponseDTO<?> executeWithdraw(WithdrawRequestDTO withdrawRequestDTO) {
         try (var ignored = metrics.trace("WITHDRAW")) {
             log.info("Start process | from:{} to:{}", withdrawRequestDTO.getAccountFrom(), withdrawRequestDTO.getAccountTo());
             return metrics.getUserAccountsTokenTimer()
                     .record(() -> super.executeWithdraw(withdrawRequestDTO));
         } finally {
-            log.debug(END_LOG_TEXT);
+            log.info(END_LOG_TEXT);
         }
     }
 
