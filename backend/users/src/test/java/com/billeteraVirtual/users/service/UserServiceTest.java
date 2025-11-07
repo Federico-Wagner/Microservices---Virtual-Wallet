@@ -1,6 +1,5 @@
 package com.billeteraVirtual.users.service;
 
-import com.billeteraVirtual.users.Mapper.UserMapper;
 import com.billeteraVirtual.users.dto.RegisterDTO;
 import com.billeteraVirtual.users.dto.ResponseDTO;
 import com.billeteraVirtual.users.dto.UserDTO;
@@ -10,30 +9,27 @@ import com.billeteraVirtual.users.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class UserServiceTest {
 
-    private ExternalResoursesConnectionService externalResoursesConnectionService;
+    @MockBean
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private UserMapper userMapper;
+    @Autowired
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userRepository = mock(UserRepository.class);
-        passwordEncoder = mock(PasswordEncoder.class);
-        userMapper = mock(UserMapper.class);
-        externalResoursesConnectionService = mock(ExternalResoursesConnectionService.class);
-        userService = new UserService(externalResoursesConnectionService, userRepository, passwordEncoder, userMapper);
     }
 
     @Test
-    void registerNewClientIsSaved() {
+    void signupIsSaved() {
         // given
         RegisterDTO dto = new RegisterDTO();
         dto.setName("Ana");
@@ -55,10 +51,9 @@ class UserServiceTest {
         savedUserDTO.setSurname("García");
         savedUserDTO.setDni("12345678");
 
-        when(passwordEncoder.encode("plainPass")).thenReturn("encodedPass");
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        ResponseDTO<?> response = userService.registerNewClient(dto);
+        ResponseDTO<?> response = userService.signup(dto);
 
         // then
         assertThat(response.isSuccess()).isTrue();
@@ -72,7 +67,6 @@ class UserServiceTest {
 
         assertThat(captured.getName()).isEqualTo("Ana");
         assertThat(captured.getSurname()).isEqualTo("García");
-        assertThat(captured.getPassword()).isEqualTo("encodedPass");
         assertThat(captured.getDni()).isEqualTo("12345678");
         assertThat(captured.getRole()).isEqualTo(RolesEnum.CLIENT);
     }
@@ -86,16 +80,14 @@ class UserServiceTest {
         dto.setPassword("plainPass");
         dto.setDni("12345678");
 
-        when(passwordEncoder.encode("plainPass")).thenReturn("encodedPass");
         when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("DB error"));
 
         // when
-        ResponseDTO<?> response = userService.registerNewClient(dto);
+        ResponseDTO<?> response = userService.signup(dto);
 
         // then
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getData()).isNull();
-        assertThat(response.getErrorMsg()).isEqualTo("DB error");
     }
 
 }

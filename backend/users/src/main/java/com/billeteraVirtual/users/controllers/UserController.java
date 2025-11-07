@@ -31,13 +31,13 @@ public class UserController {
         return responseDTO;
     }
 
-    @PostMapping("/register")
-    public ResponseDTO<?> register(@RequestBody RegisterDTO registerDto) {
-        ResponseDTO<?> responseDTO = this.userService.registerNewClient(registerDto);
+    @PostMapping("/signup")
+    public ResponseDTO<?> signup(@RequestBody RegisterDTO registerDto) {
+        ResponseDTO<?> responseDTO = this.userService.signup(registerDto);
         return responseDTO;
     }
 
-    @GetMapping("/userData/{token}")
+    @GetMapping("/getUserDataToken/{token}")
     public ResponseDTO<UserDTO> getUserDataToken(@PathVariable String token) {
         ResponseDTO<UserDTO> responseDTO = this.userService.getUserDataToken(token);
         return responseDTO;
