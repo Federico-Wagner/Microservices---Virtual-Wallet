@@ -11,14 +11,12 @@ public class ResponseDTO<T> {
     private T data;
 
 
-    public ResponseDTO(boolean success, T data){
-        this.success = success;
-        this.data = data;
+    public static <T> ResponseDTO<T> success(T data) {
+        return new ResponseDTO<>(true, null, data);
     }
 
-    public ResponseDTO(boolean success, String errorMsg){
-        this.success = success;
-        this.errorMsg = errorMsg;
+    public static <T> ResponseDTO<T> failure(String message) {
+        return new ResponseDTO<>(false, message, null);
     }
 
 }

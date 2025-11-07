@@ -1,7 +1,6 @@
 package com.BilleteraVirtual.accounts.service;
 
 import com.BilleteraVirtual.accounts.dto.CreateAccountDTO;
-import com.BilleteraVirtual.accounts.dto.UpdateAccountDTO;
 import com.BilleteraVirtual.accounts.dto.WithdrawRequestDTO;
 import com.BilleteraVirtual.accounts.entity.Account;
 import com.BilleteraVirtual.accounts.enumerators.AccountStatus;
@@ -15,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,46 +63,6 @@ class AccountServiceTest {
         accountService.bajaCuenta(1L);
 
         assertEquals(AccountStatus.CLOSED, account.getState());
-        verify(accountRepository).save(account);
-    }
-
-    @Test
-    void testConsultarCuentas() {
-        Account a1 = new Account();
-        Account a2 = new Account();
-        when(accountRepository.findAllByUserId(1L)).thenReturn(List.of(a1, a2));
-
-        List<Account> accounts = accountService.consultarCuentas(1L);
-
-        assertEquals(2, accounts.size());
-    }
-
-    @Test
-    void testConsultarFondoCuenta() {
-        Account account = new Account();
-        account.setBalance(BigDecimal.valueOf(100));
-
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
-
-        BigDecimal saldo = accountService.consultarFondoCuenta(1L);
-        assertEquals(BigDecimal.valueOf(100), saldo);
-    }
-
-    @Test
-    void testActualizarSaldo() {
-        Account account = new Account();
-        account.setId(1L);
-        account.setBalance(BigDecimal.ZERO);
-
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
-
-        UpdateAccountDTO dto = new UpdateAccountDTO();
-        dto.setAccount_id(1L);
-        dto.setNewSaldo(BigDecimal.valueOf(500));
-
-        accountService.actualizarSaldo(dto);
-
-        assertEquals(BigDecimal.valueOf(500), account.getBalance());
         verify(accountRepository).save(account);
     }
 

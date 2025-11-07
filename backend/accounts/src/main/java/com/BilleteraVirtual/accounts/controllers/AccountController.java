@@ -33,20 +33,19 @@ public class AccountController {
     }
 
     @PostMapping("/executeWithdraw")
-    public WithdrawResponseDTO executeWithdraw(@RequestBody WithdrawRequestDTO withdrawRequestDTO) {
-        WithdrawResponseDTO withdrawResponseDTO = accountService.executeWithdraw(withdrawRequestDTO);
-        return withdrawResponseDTO;
+    public ResponseDTO<?> executeWithdraw(@RequestBody WithdrawRequestDTO withdrawRequestDTO) {
+        return accountService.executeWithdraw(withdrawRequestDTO);
     }
 
     // ALTAS Y BAJAS
     @PostMapping("/alta")
-    public void altaCuenta(@RequestBody CreateAccountDTO createAccountDTO) {
-        accountService.altaCuenta(createAccountDTO);
+    public ResponseDTO<?> altaCuenta(@RequestBody CreateAccountDTO createAccountDTO) {
+        return accountService.altaCuenta(createAccountDTO);
     }
 
     @PostMapping("/baja/{id}")
-    public void bajaCuenta(@PathVariable Long id) {
-        accountService.bajaCuenta(id);
+    public ResponseDTO<?> bajaCuenta(@PathVariable Long id) {
+        return accountService.bajaCuenta(id);
     }
 
 }
